@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,18 +7,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model vendedor {
+model facturas_compras {
   id        String   @id @default(cuid())
-  name      String
-  ruc     String
+  timbrado  Int
+  ruc       String
+  nombre    String
+  condicion String
+  valor     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model contador {
+model facturas_ventas {
   id        String   @id @default(cuid())
-  name      String
-  ruc     String
+  timbrado  Int
+  ruc       String
+  nombre    String
+  condicion String
+  valor     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model contadores {
+  id        String   @id(map: "contador_pkey")
+  ruc       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  nombre    String
+}
+
+model vendedores {
+  id        String   @id(map: "vendedor_pkey")
+  ruc       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  nombre    String
 }
