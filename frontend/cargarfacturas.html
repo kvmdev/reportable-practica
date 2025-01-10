@@ -4,17 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facturas</title>
+    <!-- CDN de boostrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- CSS de la página -->
     <link rel="stylesheet" href="styles/facturas/style.css">
 </head>
 <body>
     <div class="container">
         <div class="form-container">
             <div class="toggle-container">
-                
+                <!-- la funcion toggleForm que cambia de estado esta en /js/facturas/funcionalidades.js -->
                 <button class="btn-toggle active" onclick="toggleForm('compra')">Compras</button>
                 <button class="btn-toggle" onclick="toggleForm('venta')">Ventas</button>
             </div>
+            <!-- Se escribe ambos formularios y se desapaece o desaparece en funcioin de cual está apretado -->
+
 
             <!-- Formulario de Compras -->
             <form id="formCompra">
@@ -95,9 +99,11 @@
             </form>
         </div>
     </div>
-
+    <!-- Cdn de javascript de boostrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Scripts de funcionalidades  -->
     <script src="./js/facturas/funcionalidades.js"></script>
-    
+    <!-- Todas las funciones que se encarguen de interactuar con la API -->
+    <script src="./js/facturas/interaccion.js"></script>
 </body>
 </html>
