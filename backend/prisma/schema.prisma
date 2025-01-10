@@ -8,39 +8,42 @@ datasource db {
 }
 
 model facturas_compras {
-  id        String   @id @default(cuid())
-  timbrado  Int
-  ruc       String
-  nombre    String
-  condicion String
-  valor     Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(cuid())
+  timbrado      Int
+  ruc           String
+  condicion     String
+  fecha_emision DateTime
+  valor         Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  razonSocial   String
 }
 
 model facturas_ventas {
-  id        String   @id @default(cuid())
-  timbrado  Int
-  ruc       String
-  nombre    String
-  condicion String
-  valor     Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(cuid())
+  timbrado      Int
+  ruc           String
+  condicion     String
+  fecha_emision DateTime
+  valor         Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+  razonSocial   String
 }
 
 model contadores {
-  id        String   @id(map: "contador_pkey")
+  id        String   @id(map: "contador_pkey") @default(cuid())
   ruc       String
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @default(now())
+  password  String
   nombre    String
 }
 
 model vendedores {
-  id        String   @id(map: "vendedor_pkey")
+  id        String   @id(map: "vendedor_pkey") @default(cuid())
   ruc       String
   createdAt DateTime @default(now())
-  updatedAt DateTime
+  updatedAt DateTime @updatedAt
   nombre    String
 }
