@@ -3,47 +3,41 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model facturas_compras {
   id            String   @id @default(cuid())
-  timbrado      Int
+  razonSocial   String
   ruc           String
+  timbrado      Int
   condicion     String
   fecha_emision DateTime
   valor         Int
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  razonSocial   String
 }
 
 model facturas_ventas {
   id            String   @id @default(cuid())
-  timbrado      Int
+  razonSocial   String
   ruc           String
+  timbrado      Int
   condicion     String
   fecha_emision DateTime
   valor         Int
   createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now())
-  razonSocial   String
+  updatedAt     DateTime @updatedAt
 }
 
-model contadores {
-  id        String   @id(map: "contador_pkey") @default(cuid())
+model users {
+  id        String   @id(map: "user_pkey") @default(cuid())
+  razonSocial    String
+  password  String
   ruc       String
+  rol      String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  password  String
-  nombre    String
-}
-
-model vendedores {
-  id        String   @id(map: "vendedor_pkey") @default(cuid())
-  ruc       String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  nombre    String
 }
