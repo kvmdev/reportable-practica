@@ -11,107 +11,54 @@
 </head>
 <body>
     <div class="container">
-        <div class="form-container">
-            <div class="toggle-container">
-                <!-- la funcion toggleForm que cambia de estado esta en /js/facturas/funcionalidades.js -->
-                <button class="btn-toggle active" onclick="toggleForm('compra')">Compras</button>
-                <button class="btn-toggle" onclick="toggleForm('venta')">Ventas</button>
+        <h1 class="my-4">Facturas</h1>
+        <div class="mb-3">
+            <input type="text" id="filterInput" class="form-control" placeholder="Filtrar por RUC, Razón Social o Número de Factura">
+        </div>
+        <table class="table table-striped" id="invoiceTable">
+            <thead>
+                <tr>
+                    <th>Número de Factura</th>
+                    <th>Razón Social</th>
+                    <th>RUC</th>
+                    <th>Timbrado</th>
+                    <th>Condición</th>
+                    <th>Fecha de Emisión</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody id="invoiceTableBody"></tbody>
+        </table>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Nueva Factura
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="#" onclick="openModal('compra')">Compra</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="openModal('venta')">Venta</a></li>
+                </ul>
             </div>
-            <!-- Se escribe ambos formularios y se desapaece o desaparece en funcioin de cual está apretado -->
-
-
-            <!-- Formulario de Compras -->
-            <form id="formCompra">
-                <h2>Cargar factura de compra</h2>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">RUC</span>
-                    <input type="text" class="form-control" placeholder="RUC del proveedor" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Nombre</span>
-                    <input type="text" class="form-control" placeholder="Nombre del proveedor" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Fecha</span>
-                    <input type="date" class="form-control" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">₲</span>
-                    <input type="number" class="form-control" placeholder="Monto de lo comprado" value="0" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Timbrado</span>
-                    <input type="number" class="form-control" placeholder="Número de timbrado" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">N° Factura</span>
-                    <input type="number" class="form-control" placeholder="Número de factura" required>
-                </div>
-
-                <div>
-                    <label class="form-label" for="customFile">Subir Factura</label>
-                    <input type="file" class="form-control" id="customFile" />
-                </div> 
-
-                <div class="btn-container">
-                    <button type="submit" class="btn btn-primary">Subir</button>
-                    <button type="reset" class="btn btn-outline-light">Limpiar</button>
-                </div>
-            </form>
-
-            <!-- Formulario de Ventas -->
-            <form id="formVenta">
-                <h2>Cargar factura de venta</h2>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">RUC</span>
-                    <input type="text" class="form-control" placeholder="RUC del cliente" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Nombre</span>
-                    <input type="text" class="form-control" placeholder="Nombre del cliente" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Fecha</span>
-                    <input type="date" class="form-control" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">₲</span>
-                    <input type="number" class="form-control" placeholder="Monto de la venta" value="0" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Timbrado</span>
-                    <input type="number" class="form-control" placeholder="Número de timbrado" required>
-                </div>
-
-                <div class="input-group mb-3">
-                    <span class="input-group-text">N° Factura</span>
-                    <input type="number" class="form-control" placeholder="Número de factura" required>
-                    
-                </div>
-                
-                <div>
-                    <label class="form-label" for="customFile">Subir Factura</label>
-                    <input type="file" class="form-control" id="customFile" />
-                </div>
-
-                <div class="btn-container">
-                    <button type="submit" class="btn btn-primary">Subir</button>
-                    <button type="reset" class="btn btn-outline-light">Limpiar</button>
-                </div>
-              
-                
-            </form>
+            
+            <div id="pagination"></div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="invoiceModalLabel">Cargar factura</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form content will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Cdn de javascript de boostrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!-- Scripts de funcionalidades  -->
