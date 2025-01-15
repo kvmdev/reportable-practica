@@ -10,6 +10,7 @@ datasource db {
 
 model facturas_compras {
   id            String   @id @default(cuid())
+  numeroFactura Int
   razonSocial   String
   ruc           String
   timbrado      Int
@@ -18,10 +19,13 @@ model facturas_compras {
   valor         Int
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  userId        String
+  user          users    @relation(fields: [userId], references: [id])
 }
 
 model facturas_ventas {
   id            String   @id @default(cuid())
+  numeroFactura Int
   razonSocial   String
   ruc           String
   timbrado      Int
@@ -30,14 +34,18 @@ model facturas_ventas {
   valor         Int
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  userId        String
+  user          users    @relation(fields: [userId], references: [id])
 }
 
 model users {
-  id        String   @id(map: "user_pkey") @default(cuid())
-  razonSocial    String
-  password  String
-  ruc       String
-  rol      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id              String             @id(map: "user_pkey") @default(cuid())
+  razonSocial     String
+  password        String
+  ruc             String
+  rol             String
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @default(now())
+  facturasVentas  facturas_ventas[]
+  facturasCompras facturas_compras[]
 }
