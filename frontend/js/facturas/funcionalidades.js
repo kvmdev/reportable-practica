@@ -1,18 +1,21 @@
-//Funciona para poder hacer 
 function toggleForm(type) {
-    const formCompra = document.getElementById('formCompra');
-    const formVenta = document.getElementById('formVenta');
-    const buttons = document.querySelectorAll('.btn-toggle');
-    
-    if (type === 'compra') {
-        formCompra.style.display = 'block';
-        formVenta.style.display = 'none';
-        buttons[0].classList.add('active');
-        buttons[1].classList.remove('active');
-    } else {
-        formCompra.style.display = 'none';
-        formVenta.style.display = 'block';
-        buttons[0].classList.remove('active');
-        buttons[1].classList.add('active');
-    }
+    document.getElementById('formCompra').style.display = type === 'compra' ? 'block' : 'none';
+    document.getElementById('formVenta').style.display = type === 'venta' ? 'block' : 'none';
 }
+
+function agregarFactura(tipo) {
+    const form = tipo === 'compra' ? document.getElementById('formCompra') : document.getElementById('formVenta');
+    const datos = Array.from(form.querySelectorAll('input')).map(input => input.value);
+    const nuevaFila = `<tr>${datos.map(dato => `<td>${dato}</td>`).join('')}</tr>`;
+    document.getElementById('facturaTableBody').insertAdjacentHTML('beforeend', nuevaFila);
+    form.reset();
+    var modal = bootstrap.Modal.getInstance(document.getElementById('facturaModal'));
+    modal.hide();
+}
+
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    const valor = this.value.toLowerCase();
+    document.querySelectorAll('#facturaTableBody tr').forEach(fila => {
+        fila.style.display = fila.innerText.toLowerCase().includes(valor) ? '' : 'none';
+    });
+});
