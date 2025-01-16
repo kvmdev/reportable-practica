@@ -1,4 +1,8 @@
 import { PrismaClient } from '@prisma/client'
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import multer from 'multer';
+import { v4 as uuidv4 } from 'uuid';
+
 const prisma = new PrismaClient()
 
 export const createFacturaVenta = async (req, res) => {
@@ -357,5 +361,104 @@ export const deleteFacturaCompra = async (req, res) => {
     } catch (error) {
         console.error('Error deleting factura:', error)
         res.status(500).json({ message: "Error al eliminar la factura", error })
+    }
+}
+
+
+
+// Configure multer for image upload
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+// Configure Gemini AI
+const genAI = new GoogleGenerativeAI('AIzaSyCduhfz2XnsYnEFFefh9IF8UQLltznjIZU');
+
+// Helper function to convert image buffer to base64
+function bufferToBase64(buffer) {
+    return buffer.toString('base64');
+}
+
+// Helper function to extract date from string and format it
+function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toISOString();
+}
+
+function cleanJsonString(str) {
+    // Remove markdown code block indicators and 'json' word
+    return str.replace(/```json\n?/g, '')
+              .replace(/```/g, '')
+              .trim();
+}
+
+
+export const obtenerFactura = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No se proporcionó ninguna imagen' });
+        }
+
+        // Convert image to base64
+        const imageBase64 = bufferToBase64(req.file.buffer);
+
+        // Initialize Gemini 1.5 Flash model
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        // Prepare the image for analysis
+        const prompt = `Analiza esta factura y extrae la siguiente información en formato JSON:
+            - numeroFactura (número)
+            - razonSocial (texto)
+            - ruc (texto)
+            - timbrado (número)
+            - condicion (texto: "Contado" o "Crédito")
+            - fecha_emision (fecha en formato YYYY-MM-DD)
+            - valor (número)
+            
+            Responde solamente con el JSON, sin ningún otro texto.`;
+
+        const result = await model.generateContent([
+            prompt,
+            {
+                inlineData: {
+                    mimeType: req.file.mimetype,
+                    data: imageBase64
+                }
+            }
+        ]);
+
+        const response = await result.response;
+        const cleanedResponse = cleanJsonString(response.text());
+        
+        let extractedData;
+        try {
+            extractedData = JSON.parse(cleanedResponse);
+        } catch (parseError) {
+            console.error('Error parsing cleaned JSON response:', cleanedResponse);
+            throw new Error('La respuesta del modelo no es un JSON válido');
+        }
+
+        // Prepare final response
+        const invoiceData = {
+            id: uuidv4(),
+            numeroFactura: extractedData.numeroFactura,
+            razonSocial: extractedData.razonSocial,
+            ruc: extractedData.ruc,
+            timbrado: extractedData.timbrado,
+            condicion: extractedData.condicion,
+            fecha_emision: formatDate(extractedData.fecha_emision),
+            valor: extractedData.valor,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            userId: req.body.userId || "default-user-id"
+        };
+
+        res.json(invoiceData);
+
+    } catch (error) {
+        console.error('Error al procesar la factura:', error);
+        res.status(500).json({ 
+            error: 'Error al procesar la factura',
+            details: error.message 
+        });
     }
 }

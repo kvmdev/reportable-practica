@@ -11,7 +11,8 @@ import {
     getFacturaCompraById,
     getFacturaCompraByRucnumber,
     updateFacturaCompra,
-    deleteFacturaCompra
+    deleteFacturaCompra,
+    obtenerFactura
 } from '../controllers/facturasController.js'
 
 const router = express.Router()
@@ -33,6 +34,8 @@ router.get('/facturas-compras/:numRuc/:numFactura', getFacturaCompraByRucnumber)
 router.put('/facturas-compras/:id', updateFacturaCompra)
 router.delete('/facturas-compras/:id', deleteFacturaCompra)
 
+// Rutas de imagen factura
+router.post('/obtener-factura', obtenerFactura)
 
 
 
