@@ -370,8 +370,12 @@ export const deleteFacturaCompra = async (req, res) => {
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Configure Gemini AI
-const genAI = new GoogleGenerativeAI('AIzaSyCduhfz2XnsYnEFFefh9IF8UQLltznjIZU');
+import dotenv from 'dotenv'; // Usamos la sintaxis de import para dotenv
+dotenv.config(); // Cargamos las variables de entorno
+
+// Ahora puedes acceder a la clave de API como una variable de entorno
+const googleAPIKey = process.env.GOOGLE_API_KEY;
+const genAI = new GoogleGenerativeAI(googleAPIKey);
 
 // Helper function to convert image buffer to base64
 function bufferToBase64(buffer) {
