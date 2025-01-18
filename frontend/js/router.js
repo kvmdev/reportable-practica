@@ -6,7 +6,7 @@ class Router {
             '': this.checkAuth
         };
 
-        // Interceptar clicks en enlaces para usar History API
+
         document.addEventListener('click', (e) => {
             if (e.target.matches('a')) {
                 e.preventDefault();
@@ -66,20 +66,20 @@ class Router {
     }
 
     navigateTo(path, pushState = false) {
-        // Ruta limpia para la URL
+ 
         const cleanPath = path.replace('.html', '');
         
-        // Si ya estamos en esa ruta, no hacemos nada
+
         if (window.location.pathname.endsWith(cleanPath)) return;
 
-        // Actualizar el historial antes de navegar
+
         if (pushState) {
             window.history.pushState({}, '', cleanPath);
         } else {
             window.history.replaceState({}, '', cleanPath);
         }
 
-        // Navegar al archivo .html real
+
         window.location.href = `./${path}.html`;
     }
 }
