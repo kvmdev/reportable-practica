@@ -29,14 +29,18 @@ button.addEventListener("click", () => {
   })
     .then((response) => response.json())
     .then((data) => {
-
+  
       Swal.close();
-
+  
       if (data.token) {
+        localStorage.setItem('jwt', data.token);
         Swal.fire({
           text: "Bienvenido",
           title: "Inicio de sesión correcto",
           icon: "success",
+        }).then(() => {
+       
+          window.location.href = './index.html';  
         });
       } else {
         Swal.fire({
@@ -47,10 +51,9 @@ button.addEventListener("click", () => {
       }
     })
     .catch((error) => {
-
+  
       Swal.close();
-
-   
+  
       Swal.fire({
         text: "Ocurrió un error al procesar su solicitud. Intente nuevamente.",
         title: "Error de conexión",
@@ -58,4 +61,5 @@ button.addEventListener("click", () => {
       });
       console.error("Error:", error);
     });
-});
+  });
+  
